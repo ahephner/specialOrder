@@ -1,7 +1,7 @@
 @isTest
-public class test_specialOrderSingleSalesDoc {
-    @isTest
-    static void test_specialOrderSingleSalesDoc(){
+public class test_specialOrderClone {
+@isTest
+    static void test_specialOrderClone(){
         //account
        
         Account cust = new Account();
@@ -33,23 +33,18 @@ public class test_specialOrderSingleSalesDoc {
                                                                       sales_margin__c = 45, minimum_margin__c= 30 );
         insert detail; 
         
+         //construct standard controller
+        ApexPages.StandardController con = new ApexPages.StandardController(head);
+        //create the controller
+        specialOrderCloneWProducts clone = new specialOrderCloneWProducts(con);
+        
         Test.startTest();
-			//set page and controllers
-	       	PageReference pref = Page.specialOrderSingleSalesDoc;         
-        	Test.setCurrentPage(pref);         
-			ApexPages.currentPage().getParameters().put('id', head.Id); 
-         	ApexPages.StandardController sc = new ApexPages.StandardController(head);
-        	specialOrderSingleSalesDoc ext = new specialOrderSingleSalesDoc(sc);
-    			//call methods and assert 
-        		list<Order_Request_Detail__c> product = ext.getdetail();   
-        		system.assertNotEquals(product, null);
-       			list<Order_Request__c> c =  ext.gethead();
-        		system.debug('here is con.getx  '+ c );
-        		system.assertNotEquals(c, null);
-				object z = ext.getq();
-    			system.debug(z);
-          Test.stopTest();
-        
-        
+        	PageReference method = clone.cloneSO();
+        	id clonedOR = [select id from order_request__c where id = :clone.newOrdID].id;
+        	system.assertNotEquals(clonedOr, null);
+        	list<Order_Request_Detail__c> prod = [select quantity_requested__c from Order_Request_Detail__c where order_request__c =: clonedOR];
+        	system.assertEquals(1, prod.size());
+        Test.stopTest(); 
+
     }
 }
