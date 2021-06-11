@@ -1,0 +1,25 @@
+<template>
+    <lightning-card  variant="Narrow"  title="Requested Products">
+        <template if:true={selection}>
+            <!-- <ul class='slds-m-top-small'>
+                <template for:each={selection} for:item="sp" >
+                   <li key={sp.id} class='slds-m-horizontal_xx-small slds-m-bottom_x-small'>
+                    <lightning-icon icon-name="utility:close" name={sp.id} size='small' class='hover'
+                    alternative-text='remove' title="Remove" onclick={removeProd} ></lightning-icon>
+                    <span class="slds-p-left_small">{sp.name}</span>
+                    <span class="slds-p-left_small">{sp.desc}</span>
+                    <span class="slds-p-left_small">{sp.qty}</span>
+                   </li>
+                </template>
+            </ul> -->
+            <lightning-datatable
+                key-field="id"
+                show-row-number-column
+                hide-checkbox-column
+                data={selection}
+                columns={columns}
+                onrowaction={handleRowAction}>
+        </lightning-datatable>
+        </template>
+    </lightning-card>
+</template>

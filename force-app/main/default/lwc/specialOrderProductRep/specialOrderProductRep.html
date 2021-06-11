@@ -1,0 +1,52 @@
+<template>
+    <div class={flexipageRegionWidth}>
+    <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="small" variant='brand'></lightning-spinner>
+    </template>
+    <template if:false={isLoading}>
+        <template if:true={formSize}>
+            <lightning-datatable
+                key-field='Id'
+                data={items}
+                columns={columns}
+                onsave={handleSave}
+                draft-values={draftValues}
+                hide-checkbox-column>
+
+            </lightning-datatable>
+        </template>
+
+        <template if:false={formSize}>
+            <lightning-layout multiple-rows="true">
+                <template for:each={items} for:item='item'>
+                    <lightning-layout-item size="12" key={item.Id} class="slds-box slds-p-around_none 
+                    slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+                    <div class='slds-grid'>
+                        <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
+                            <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
+                           <p>Minimum Margin</p> <lightning-formatted-number id={item.Id} value={item.Minimum_Margin__c} label='Sales Margin' format-style="percent-fixed" readonly></lightning-formatted-number>
+                        </div>
+                        <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
+                            <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
+                            type='number' formater='percent' onchange={handleMargin}></lightning-input>
+                            <lightning-input name={item.Id} value={item.Unit_Price__c} label='Total Price' 
+                            type='number' formater='currency' onchange={handlePrice} ></lightning-input>
+                        </div>
+                    </div>
+                    </lightning-layout-item>
+
+                </template>
+            </lightning-layout>
+            <div class="slds-docked-form-footer">
+                <lightning-button variant="destructive" label="Cancel" 
+                                  title="Cancel" onclick={cancel} 
+                                  class="slds-m-left_x-small"></lightning-button>
+                <lightning-button variant="success" label="Save" 
+                                  title="Successful action" onclick={saveMobile} 
+                                  class="slds-m-left_x-small"></lightning-button>
+                <!-- <button type="button" onclick={prodInfo} class="slds-button slds-button_brand">prod info</button> -->
+            </div>
+        </template>
+    </template>
+</div>
+</template>
