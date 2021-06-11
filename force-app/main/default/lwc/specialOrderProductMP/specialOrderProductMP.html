@@ -24,9 +24,12 @@
                     <div class='slds-grid'>
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
                             <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
-                           <p>Minimum Margin</p> <lightning-formatted-number id={item.Id} value={item.Minimum_Margin__c} label='Sales Margin' format-style="percent-fixed" readonly></lightning-formatted-number>
+                            <lightning-input name={item.Id} value={item.Cost__c} label='Unit Cost' 
+                            type='number' formater='currency' onchange={handleCost}></lightning-input>
                         </div>
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
+                            <lightning-input name={item.Id} value={item.Minimum_Margin__c} label='Min. Margin' 
+                            type='number' formater='percent' onchange={handleMinMargin}></lightning-input>
                             <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
                             type='number' formater='percent' onchange={handleMargin}></lightning-input>
                             <lightning-input name={item.Id} value={item.Unit_Price__c} label='Total Price' 

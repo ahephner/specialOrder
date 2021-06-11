@@ -1,7 +1,7 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import FORM_FACTOR from '@salesforce/client/formFactor';
-import getItems from '@salesforce/apex/specialOrderCloneWProducts.getOrderRequestItems';
+import getItems from '@salesforce/apex/lookUpFlow.getOrderRequestItems';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 
@@ -134,6 +134,16 @@ export default class SpecialOrderProductMP extends LightningElement {
                 }
             },800)
         }
+
+        handleCost(c){
+            let index = this.items.findIndex(prod => prod.Id === c.target.name);
+            this.items[index].Cost__c = Number(c.detail.value);
+        }
+
+        handleMinMargin(mm){
+            let index = this.items.findIndex(prod => prod.Id === mm.target.name);
+            this.items[index].Minimum_Margin__c = Number(mm.detail.value);
+        }
         //save mobile
         saveMobile(e){
             console.log('items');
@@ -145,7 +155,9 @@ export default class SpecialOrderProductMP extends LightningElement {
                 let Id = draft.Id;
                 let Sales_Margin__c = draft.Sales_Margin__c
                 let Unit_Price__c = draft.Unit_Price__c;
-                const fields = {Id, Sales_Margin__c, Unit_Price__c}
+                let Cost__c = draft.Cost__c;
+                let Minimum_Margin__c = draft.Minimum_Margin__c;
+                const fields = {Id, Sales_Margin__c, Unit_Price__c, Cost__c, Minimum_Margin__c}
                 return { fields };
             });
             console.log(recordInputs)
