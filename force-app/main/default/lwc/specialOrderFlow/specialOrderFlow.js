@@ -1,7 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 //wait 300 ms after user stops typing
-const SEARCH_DELAY = 1000; 
+const SEARCH_DELAY = 500; 
 import searchProd from '@salesforce/apex/lookUpFlow.searchProd';
 import addProducts from '@salesforce/apex/lookUpFlow.addProducts';
 const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|-|\\)/g;
