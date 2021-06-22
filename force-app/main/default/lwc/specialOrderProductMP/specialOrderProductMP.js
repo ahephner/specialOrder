@@ -7,11 +7,11 @@ import { refreshApex } from '@salesforce/apex';
 
 const columns = [
     {label:'Product Requested', 'fieldName':'nameURL', type:'url', typeAttributes:{label:{fieldName:'product'}},target:'_blank' },
-    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number' },
-    {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency', editable:true},    
-    {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed', editable:true },
-    {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true},
-    {label:'Unit Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true},
+    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number', cellAttributes:{alignment: 'center'} },
+    {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency', editable:true, cellAttributes:{alignment: 'center'}},    
+    {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed', editable:true, cellAttributes:{alignment: 'center'} },
+    {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true, cellAttributes:{alignment: 'center'}},
+    {label:'Unit Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true, cellAttributes:{alignment: 'center'}},
 ]
 
 export default class SpecialOrderProductMP extends LightningElement {
@@ -120,15 +120,29 @@ export default class SpecialOrderProductMP extends LightningElement {
             let index = this.items.findIndex(prod => prod.Id === id);
             window.clearTimeout(this.delay)
             this.delay = setTimeout(()=>{
-                if(type === 'Sales_Margin__c'){
+                if (type === 'Cost__c'){
+                    this.items[index].Cost__c = num;
+                    this.items = [...this.items];
+                    return; 
+                }
+                else if(type === 'Minimum_Margin__c'){
+                    this.items[index].Minimum_Margin__c = num;
+                    this.items[index].Sales_Margin__c = num;
+                    this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - num/100)).toFixed(2);
+                    this.items = [...this.items];
+                    return; 
+                }
+                else if(type === 'Sales_Margin__c'){
                     
                     this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - num/100)).toFixed(2);
                     this.items[index].Sales_Margin__c = num; 
                     this.items = [...this.items]
+                    return; 
                 }else if(type === 'Unit_Price__c'){
                     this.items[index].Sales_Margin__c = Number((1 - (this.items[index].Cost__c /num))*100).toFixed(2)
                     this.items[index].Unit_Price__c = num; 
-                    this.items = [...this.items]
+                    this.items = [...this.items];
+                    return; 
                 }
             }, 800)
 
@@ -186,6 +200,8 @@ export default class SpecialOrderProductMP extends LightningElement {
         handleMinMargin(mm){
             let index = this.items.findIndex(prod => prod.Id === mm.target.name);
             this.items[index].Minimum_Margin__c = Number(mm.detail.value);
+            this.items[index].Sales_Margin__c = Number(mm.detail.value);
+            this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - mm.detail.value/100)).toFixed(2);
         }
         //save mobile
         saveMobile(e){

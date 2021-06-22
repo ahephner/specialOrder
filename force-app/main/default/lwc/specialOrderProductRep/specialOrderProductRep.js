@@ -7,11 +7,11 @@ import { refreshApex } from '@salesforce/apex';
 
 const columns = [
     {label:'Product Requested', 'fieldName':'nameURL', type:'url', typeAttributes:{label:{fieldName:'product'}},target:'_blank' },
-    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number' },
-    {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency'},    
-    {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed' },
-    {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true},
-    {label:'Unit Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true},
+    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number', cellAttributes:{alignment: 'center'}  },
+    {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency', cellAttributes:{alignment: 'center'} },    
+    {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed', cellAttributes:{alignment: 'center'}  },
+    {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true, cellAttributes:{alignment: 'center'} },
+    {label:'Unit Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true, cellAttributes:{alignment: 'center'} },
 ]
 
 export default class SpecialOrderProductRep extends LightningElement {
