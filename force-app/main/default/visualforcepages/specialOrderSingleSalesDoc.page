@@ -1,0 +1,204 @@
+<!-- customer pdf copy on order Large orders 14+ items are breaking the totals weird look for comment above that table Rare order is ever
+that big. In meantime you can create a new sales doc and split the line items into it -->
+<apex:page showHeader="false" standardStylesheets="false" renderAs="pdf"  standardcontroller="Order_Request__c" extensions="specialOrderSingleSalesDoc">
+    <apex:stylesheet value="{!$Resource.singleSalesDocStyle}"/>
+    <apex:pageMessages id="error"></apex:pageMessages>
+    
+    <div style="header">
+        <table width="100%" >
+            <col width="30%"/>
+            <col width="40%"/>
+            <col width="30%"/>
+              <tr>
+                 <td class='companyInfo'>
+                     <ul>
+                          <li id='ATS'>Advanced Turf Solutions</li>
+                          <li>{!addrStreet}</li>
+                          <li>{!addrCityState}</li>
+                          <li>(877) 433-7037</li>
+                         <!-- <li>Rep Mobile: {!head[0].sales_rep__r.mobile__c}</li>
+                          <li>Rep Email: {!head[0].sales_rep__r.email__c}</li>-->
+                       </ul>                        
+                  </td>
+                   <td class='invoiceType'>
+                       <h4>Special Order</h4>
+                  </td>
+				<td colspan='1'><apex:image style="width:80%;height:80%;" url="{!$Resource.ATSLogo}"/></td>
+            </tr> 
+        </table>
+        <hr/>
+    </div>
+    <!--error page--> 
+                <apex:outputText rendered="{!head[0].id == null}">
+                 <p>
+                      Apologies it appears there was an issue retrieving this record. Please contact your sales rep with the sales doc #
+                    </p>
+                </apex:outputText>
+                  <apex:outputText rendered="{!head[0].Approval_Status__c != 'Approved'}">
+                  	<p>
+                        This special order has not been approved yet!
+                      </p>
+                  </apex:outputText>
+              <!--   <apex:outputText rendered="{!noShow != 'x'}">
+                  	<p>
+                        Pricing not set. 
+                      </p>
+                  </apex:outputText>-->
+
+            <apex:outputText rendered="{!head[0].Approval_Status__c == 'Approved'}">
+  			
+ <!--This is the bill to ship section. Empty <td> ready for ship to info once we have it in SF--> 
+                    <div class='billTo'>
+                        <table width='100%'>
+                            <col width='40%'/>
+                            <col width='60%'/>
+                                <tr class='billToShipTo' style='padding-bottom: 0px;'>
+                                    <td class='billToCell'><b>BILL TO:</b></td>
+                                    <!--<td></td>-->
+                                </tr>
+                                <tr>
+                                 <td class='company1'>{!head[0].Customer__r.Customer_Name__c}</td>
+                                 <!--<td></td>-->
+                                </tr>
+                                <tr>
+                                    <td>{!head[0].Customer__r.Customer_Name__c}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>{!head[0].Customer__r.BillingStreet}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>{!head[0].Customer__r.BillingCity}, {!head[0].Customer__r.BillingState} {!head[0].Customer__r.BillingPostalCode}</td>
+                                    <td></td>
+                                </tr>
+                        </table>
+                    </div>
+                <br/>
+                    <!--
+                    <apex:outputText rendered="{!head[0].Replaced_by_Credit_Rebill__c == False}">
+                        <h5 style='background-color:yellow; text-align:Center;;'>
+                            Disclaimer: This is not a replacement of the original invoice.
+                        </h5>
+                    </apex:outputText>-->
+<!--Invoice Info Bar-->                    
+                    <div class='invoiceInfo'>
+                        <table width='100%' class='invoiceInfo'>
+                            <col width='16%'/><col width='16%'/><col width='16%'/>
+                           <!-- <col width='9%'/>--><col width='26%'/><col width='13%'/>
+                            <tr class='topcellInvoiceInfo'>
+                                <td><b>Invoice Date</b></td>
+                                <td><b>Invoice #</b></td>
+                                <td><b>Due Date</b></td>
+                                 <!--<td><b>Ship Type</b></td>-->
+                                <td><b>PO #</b></td>
+                                <td><b>Customer #</b></td>
+                            </tr>
+                            <tr class='bottomcellInvoiceInfo'>
+                                <td>
+                                    <apex:outputText value="{0,date,MM-dd-yyyy}">
+                                        <apex:param value="{!head[0].Request_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <td>{!head[0].name}</td>
+                                <td>
+                                    <apex:outputText value="{0,date,MM-dd-yyyy}">
+                                        <apex:param value="{!head[0].Request_Date__c}" />
+                                    </apex:outputText>
+                                </td>
+                                <!--<td>{!head[0].Customer__r.Ship_Method__c}</td>-->
+                                <td id='PO'>{!head[0].Purchase_Order__c}</td>
+                                <td>{!head[0].Customer__r.Customer__c}</td>
+                            </tr>
+                        </table>
+                    </div>
+                <br/>
+                <br/>
+<!--Add style='-fs-table-paginate: paginate;' to the table tag here to fix that weird breaking on larger orders. Warning it adds weird border styles to the entire table
+It will be a future fix--> 
+                        <table width='100%'  class='unitTable'>
+                            <col width='40%'/>
+                            <col width='20%'/>
+                            <col width='20%'/>
+                            <col width='20%'/>
+                            
+                                    <tr class='unitTableHeader'>
+                                      <th>Product</th>
+                                      <th>Qty</th>
+                                      <th>Unit Price</th>
+                                      <th>Total Price</th>
+                                    </tr>   
+                                  <apex:repeat value="{!detail}" var="p">
+                                  <tr class='unitTableOutput'> 
+                                    <td>{!p.PDF_Field__c}</td>
+                                    <td>{!p.Quantity_Requested__c}</td>
+                                    <td>${!p.Unit_Price__c}</td> 
+                                    <td>${!p.Line_Total__c}</td> 
+                                 </tr>   
+                                </apex:repeat>
+                            <tr>
+                                <td colspan='2'></td>
+                                <td class='taxAndTotal'>Invoice Qty Total:</td>
+                                <td class='final'>{!q}</td>
+                            </tr>
+                            <tr>
+                                <td colspan='2'></td>
+                                <td class='taxAndTotal'>Freight:</td>
+                                <td class='final'> ${!head[0].Freight__c}</td>
+                            </tr>
+                            <!--<tr>
+                                <td colspan='2'></td>
+                                <td class='taxAndTotal'>Tax</td>
+                                <td class='final'> Taxes</td>
+                            </tr>-->
+                            <tr><td colspan='2'></td>
+                                <td class='taxAndTotal'>Product Total:</td>
+                                <td class='final'> ${!head[0].Total_Product_Price__c}</td>
+                            </tr>
+                            <tr><td colspan='2'></td>
+                                <td class='taxAndTotal'>Order Total:</td>
+                                <td class='final'> ${!head[0].Total_Product_Price__c}</td>
+                            </tr>
+                           </table>
+                <h5>
+                    <b>* Quote Does Not Include Tax</b>
+                </h5>
+    <h4>
+        <b>PRICES ARE SUBJECT TO CHANGE BASED ON MARKET CONDITIONS</b>
+                </h4>
+               
+ <div class='footer'>
+        <h6  style="font-size:12pt;word-break:break-all">
+                    This quote is not your final invoice, and may not reflect taxes, shipping or other charges
+        </h6> 
+     <div class='stack'>
+        <div class='counter'>Invoice: {!head[0].name}</div> 
+        <div class='counter'>Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+     </div>
+
+    <!--This is the table for the links that are set in the controller.  --> 
+    <hr/>
+        <table width="100%" style="font-family:Arial, Arial Unicode MS; font-size:9px;" >
+            <col width="77%"/>
+            <col width="33%"/>
+            
+            <tbody>
+                <tr>
+                   <!-- <td >
+                        <ul class='links'>
+                           <li><a class='links' href='{!linkTotal}' target="_blank">Click Here to Pay Your Bill Online Free of Charge via ACH</a></li>
+                          <li><apex:outputLink value='{!linkTotal}' target="_blank">Test</apex:outputLink></li>
+                            <li><a class='links' href='{!feeLinkTotal}' target="_blank">Click Here to Pay Your Bill Online with a 2% Convenience Fee via Credit Card</a></li>
+                        </ul> 
+                    </td>--> 
+                    <td align="right">
+                        <div>Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    
+    </div>
+</apex:outputText>
+    
+</apex:page>

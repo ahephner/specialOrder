@@ -1,0 +1,5 @@
+<apex:page StandardController="Order_Request__c"
+           extensions="specialOrderCloneWProducts"
+           action="{!cloneSO}">
+    <apex:pageMessages /> 
+</apex:page>
