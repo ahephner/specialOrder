@@ -11,7 +11,7 @@ const columns = [
     {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency'},    
     {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed' },
     {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true},
-    {label:'Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true},
+    {label:'Unit Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true},
 ]
 
 export default class SpecialOrderProductRep extends LightningElement {
@@ -65,9 +65,13 @@ export default class SpecialOrderProductRep extends LightningElement {
         handleSave(event){
             this.isLoading = true;
             
-            const recordInputs =  event.detail.draftValues.slice().map(draft => {
-                const fields = Object.assign({}, draft);
-                return { fields };
+            const recordInputs = this.items.slice().map(draft =>{
+                let Id = draft.Id;
+                let Sales_Margin__c = draft.Sales_Margin__c
+                let Unit_Price__c = draft.Unit_Price__c;
+                const fields = {Id, Sales_Margin__c, Unit_Price__c}
+                
+            return { fields };
             });
             console.log(recordInputs);
             const promises = recordInputs.map(recordInput => updateRecord(recordInput));
@@ -104,6 +108,39 @@ export default class SpecialOrderProductRep extends LightningElement {
                 
             });  
         } 
+        //helper function accepts the values from handleCell. Then updates the table values based on type 
+        //Possible types: Cost__c, Minimum_Margin__c, Sales_Margin__c , Unit_Price__c
+        //Have to set the actual field update as the number value passed in
+        tableUpdate =(id, type, num) =>{
+            let index = this.items.findIndex(prod => prod.Id === id);
+            window.clearTimeout(this.delay)
+                this.delay = setTimeout(()=>{
+                    if(type === 'Sales_Margin__c'){
+            
+                        this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - num/100)).toFixed(2);
+                        this.items[index].Sales_Margin__c = num; 
+                        this.items = [...this.items]
+                    }else if(type === 'Unit_Price__c'){
+                        this.items[index].Sales_Margin__c = Number((1 - (this.items[index].Cost__c /num))*100).toFixed(2)
+                        this.items[index].Unit_Price__c = num; 
+                        this.items = [...this.items]
+                    }
+        }, 800)
+
+}
+        //handle cell update. Grab values then pass to helper function
+        handleCell(e){
+            let tempId;  
+            let tempType; 
+            let value; 
+            e.detail.draftValues.map(x =>{
+                tempId = x.Id;
+                tempType = Object.keys(x)[0];
+                value = Number(Object.values(x)[0])
+            });
+
+            this.tableUpdate(tempId, tempType, value);
+        }
 //Mobile stuff//////
         handleMargin(m){
             let index = this.items.findIndex(prod => prod.Id === m.target.name);
@@ -134,6 +171,7 @@ export default class SpecialOrderProductRep extends LightningElement {
                 }
             },800)
         }
+
         //save mobile
         saveMobile(e){
             console.log('items');
