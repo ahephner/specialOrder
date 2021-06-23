@@ -1,0 +1,18 @@
+<template>
+    <lightning-card  variant="Narrow">
+        <lightning-input
+        name="enter-search"
+        label="Search for product in system"
+        type="search"
+        onchange={handleKeyUp}
+        value={productName}
+    ></lightning-input>
+    <lightning-input
+        label='Product Description'
+        type='text'></lightning-input>
+    <lightning-input
+        label='Qty'
+        required
+        type='number'></lightning-input>
+    </lightning-card>
+</template>
