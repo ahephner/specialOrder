@@ -15,4 +15,11 @@
         <!--<target>lightningCommunity__Page</target>-->
         <!--<target>lightningCommunity__Default</target>-->
     </targets>
+    <targetConfigs>
+        <targetConfig  targets="lightning__FlowScreen">
+            <property name='prodDesc' type='String'/>
+            <property name='qty' type='Integer'/>
+            <property name='prodId' type='String'/>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

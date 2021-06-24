@@ -9,10 +9,12 @@
     ></lightning-input>
     <lightning-input
         label='Product Description'
-        type='text'></lightning-input>
+        type='text'
+        onchange={newDescription}></lightning-input>
     <lightning-input
         label='Qty'
         required
-        type='number'></lightning-input>
+        type='number'
+        onchange={handleQty}></lightning-input>
     </lightning-card>
 </template>
