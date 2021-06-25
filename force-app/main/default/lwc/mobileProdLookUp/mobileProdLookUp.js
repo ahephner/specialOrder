@@ -1,7 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { FlowAttributeChangeEvent} from 'lightning/flowSupport';
 import searchProd from '@salesforce/apex/lookUpFlow.searchProd';
-const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|-|\\)/g;
+const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|\\)/g;
 const SEARCH_DELAY = 500; 
 export default class MobileProdLookUp extends LightningElement {
     //vars to flow

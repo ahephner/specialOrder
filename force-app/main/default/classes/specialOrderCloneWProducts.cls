@@ -25,7 +25,7 @@ public class specialOrderCloneWProducts {
             newOrder.Approval_Status__c = 'Not Submitted';
             newOrder.Notes__c += ' Cloned from '+' '+head.Name; 
             newOrder.Request_Date__c = today;
-            newOrder.Sent_for_Approval__c = true; 
+            newOrder.Sent_for_Approval__c = false; 
             insert newOrder;
             system.debug('neworder '+newOrder);
             //Test

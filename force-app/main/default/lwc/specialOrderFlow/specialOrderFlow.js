@@ -4,7 +4,7 @@ import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flow
 const SEARCH_DELAY = 500; 
 import searchProd from '@salesforce/apex/lookUpFlow.searchProd';
 import addProducts from '@salesforce/apex/lookUpFlow.addProducts';
-const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|-|\\)/g;
+const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|\\)/g;
 export default class SpecialOrderFlow extends LightningElement {
     //tracking Importing
     @api orderId; 
