@@ -101,6 +101,11 @@ export default class SpecialOrderFlow extends LightningElement {
         }
         //save products go to the next screen
         goNext(){
+            //if no products raise an error
+            if(this.selectedIds === undefined || this.selectedIds.length < 1){
+                alert('Please add 1 product. You may need to hit the green save button next to your item'); 
+                return;
+            }
             let products = JSON.stringify(this.selectedIds);
             console.log('products'+products);
             let order = this.orderId;

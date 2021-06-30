@@ -122,13 +122,23 @@ export default class SpecialOrderProductMP extends LightningElement {
             this.delay = setTimeout(()=>{
                 if (type === 'Cost__c'){
                     this.items[index].Cost__c = num;
+                    if(this.items[index].Minimum_Margin__c < 0.01 || this.items[index].Minimum_Margin__c === undefined){
+                        return;
+                    }else{
+                        this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - this.items[index].Minimum_Margin__c/100)).toFixed(2);
+                    }
                     this.items = [...this.items];
                     return; 
                 }
                 else if(type === 'Minimum_Margin__c'){
                     this.items[index].Minimum_Margin__c = num;
                     this.items[index].Sales_Margin__c = num;
-                    this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - num/100)).toFixed(2);
+                    if(this.items[index].Cost__c === 0.00 || this.items[index].Cost__c ===undefined){
+                        return;
+                    }else{
+                        this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - num/100)).toFixed(2);
+                    }
+                    
                     this.items = [...this.items];
                     return; 
                 }
@@ -144,7 +154,7 @@ export default class SpecialOrderProductMP extends LightningElement {
                     this.items = [...this.items];
                     return; 
                 }
-            }, 800)
+            }, 300)
 
         }
         //handle table cell updates. Extract the cell values pass to helper function
@@ -195,13 +205,18 @@ export default class SpecialOrderProductMP extends LightningElement {
         handleCost(c){
             let index = this.items.findIndex(prod => prod.Id === c.target.name);
             this.items[index].Cost__c = Number(c.detail.value);
+            if(this.items[index].Minimum_Margin__c ===0 || this.items[index].Minimum_Margin__c === undefined){
+                return;
+            }else{
+                this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - mm.detail.value/100)).toFixed(2);
+            }
         }
 
         handleMinMargin(mm){
             let index = this.items.findIndex(prod => prod.Id === mm.target.name);
             this.items[index].Minimum_Margin__c = Number(mm.detail.value);
             this.items[index].Sales_Margin__c = Number(mm.detail.value);
-            this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - mm.detail.value/100)).toFixed(2);
+            this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - this.items[index].Minimum_Margin__c/100)).toFixed(2);
         }
         //save mobile
         saveMobile(e){
