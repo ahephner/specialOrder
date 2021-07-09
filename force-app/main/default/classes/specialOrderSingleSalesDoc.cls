@@ -1,8 +1,3 @@
-public with sharing class specialOrderSingleSalesDoc {
-    public specialOrderSingleSalesDoc() {
-
-    }
-}
 public class specialOrderSingleSalesDoc {
     public list<Order_Request__c> head;
       public List<Order_Request_Detail__c> detail;
