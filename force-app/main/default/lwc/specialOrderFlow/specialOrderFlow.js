@@ -4,7 +4,7 @@ import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flow
 const SEARCH_DELAY = 500; 
 import searchProd from '@salesforce/apex/lookUpFlow.searchProd';
 import addProducts from '@salesforce/apex/lookUpFlow.addProducts';
-const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|-|\\)/g;
+const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|\\)/g;
 export default class SpecialOrderFlow extends LightningElement {
     //tracking Importing
     @api orderId; 
@@ -101,6 +101,11 @@ export default class SpecialOrderFlow extends LightningElement {
         }
         //save products go to the next screen
         goNext(){
+            //if no products raise an error
+            if(this.selectedIds === undefined || this.selectedIds.length < 1){
+                alert('Please add 1 product. You may need to hit the green save button next to your item'); 
+                return;
+            }
             let products = JSON.stringify(this.selectedIds);
             console.log('products'+products);
             let order = this.orderId;

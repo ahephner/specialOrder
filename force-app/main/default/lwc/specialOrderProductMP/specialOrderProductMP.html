@@ -27,6 +27,7 @@
                             <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
                             <lightning-input name={item.Id} value={item.Cost__c} label='Unit Cost' 
                             type='number' formater='currency' onchange={handleCost}></lightning-input>
+                            <lightning-input label='QTY' name={item.Id} value={item.Quantity_Requested__c} readonly type='number'></lightning-input>
                         </div>
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
                             <lightning-input name={item.Id} value={item.Minimum_Margin__c} label='Min. Margin' 

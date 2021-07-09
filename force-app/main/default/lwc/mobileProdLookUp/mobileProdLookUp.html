@@ -1,0 +1,49 @@
+<template>
+    <lightning-card  variant="Narrow">
+        <lightning-input
+        name="enter-search"
+        label="Search for product in system"
+        type="search"
+        onchange={handleKeyUp}
+        value={productName}
+    ></lightning-input>
+    <template if:true={showResult}>
+        <div id='listbox'
+             role='listbox'
+             tabindex='0'
+        ><ul role='presentation' class={getListBoxClass}>
+            <div if:true={loading}>
+                <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+            </div>
+           <template if:true={showResult} for:each={results} for:item="x" for:index="index">
+               <li key={x.Id} data-recordid={x.Id} value={x.Product_Name__c} role='option' onclick={itemSelect}>
+                          <span class="slds-media__body">
+                            <span class="slds-listbox__option-text_entity">
+                                <lightning-formatted-rich-text
+                                    value={x.Product_Name__c}
+                                >
+                                </lightning-formatted-rich-text>
+                            </span>
+                        </span>
+                        <span class="slds-listbox__option-meta">
+                            <lightning-formatted-rich-text
+                                  value={x.Name}
+                            >
+                            </lightning-formatted-rich-text>
+                        </span>
+               </li>
+            </template> 
+        </ul>
+    </div>
+</template> 
+    <lightning-input
+        label='Product Description'
+        type='text'
+        onchange={newDescription}></lightning-input>
+    <lightning-input
+        label='Qty'
+        required
+        type='number'
+        onchange={handleQty}></lightning-input>
+    </lightning-card>
+</template>

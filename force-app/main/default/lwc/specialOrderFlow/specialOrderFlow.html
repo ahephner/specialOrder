@@ -18,7 +18,7 @@
                         <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
                     </div>
                    <template if:true={showResult} for:each={results} for:item="x" for:index="index">
-                       <li key={x.Id} data-recordid={x.Id} value={x.Product_Name__c} role='option' onclick={itemSelect}>
+                       <li key={x.Id} data-recordid={x.Id} value={x.Product_Name__c} role='option' class='hover' onclick={itemSelect}>
                                   <span class="slds-media__body">
                                     <span class="slds-listbox__option-text_entity">
                                         <lightning-formatted-rich-text
@@ -58,8 +58,8 @@
             </div>
                 <div class='slds-col slds-size-2-of-8 slds-m-top_large'>
                     <lightning-button variant="success" 
-                    label="Add Line" 
-                    title="Add Product" 
+                    label="Save Product" 
+                    title="Save Product" 
                     onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
             </div>
     </div>   

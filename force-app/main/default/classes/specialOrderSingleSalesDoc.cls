@@ -33,7 +33,7 @@ public class specialOrderSingleSalesDoc {
       public list<Order_Request__c> gethead(){ 
                     head= [select Request_Date__c, Sales_Rep__r.name, Sales_Rep__r.Email__c, Sales_Rep__r.Mobile__c, name,Approval_Status__c , Freight__c,
                                    customer__r.S_Account__c, Total_Product_Price__c, Customer__r.Customer_Name__c, Customer__r.Class__c,Customer__r.BillingCity, Customer__r.BillingState, 
-                                  Customer__r.BillingStreet, Customer__r.BillingPostalCode, Customer__r.Ship_Method__c, Customer__r.Customer__c, Purchase_Order__c
+                                  Customer__r.BillingStreet, Customer__r.BillingPostalCode, Customer__r.Ship_Method__c, Customer__r.Customer__c, Purchase_Order__c, Total_Doc_Amount__c
                                    from Order_Request__c where id = :id limit 1]; 
           
           if(head.size()> 0){
