@@ -5,6 +5,12 @@
     </template>
     <template if:false={isLoading}>
         <template if:true={formSize}>
+            <lightning-button
+            label="Add product"
+            variant="brand"
+            class="slds-m-bottom_small"
+            onclick={addProduct}
+        ></lightning-button>
             <lightning-datatable
                 key-field='Id'
                 data={items}
@@ -12,6 +18,7 @@
                 onsave={handleSave}
                 draft-values={draftValues}
                 oncellchange={handleCell}
+                onrowaction={handleAction}
                 hide-checkbox-column>
 
             </lightning-datatable>
