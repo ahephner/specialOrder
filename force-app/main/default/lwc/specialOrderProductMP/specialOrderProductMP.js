@@ -28,7 +28,8 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
     @api recordId;
     //make component aware of size
     @api flexipageRegionWidth;
-    @api prop1; 
+    @api prop1;
+    stage;  
     columns = columns;
     requestItems;
     @track items; 
@@ -51,9 +52,12 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
                 this.items = result.data.map(row =>{
                     product = row.ATS_Product__c ? row.ATS_Product__r.Product_Name__c : row.Product_Description__c;
                     nameURL = `/${row.Id}`;
+                    this.stage = row.Order_Request__r.Approval_Status__c; 
                     return {...row, nameURL, product}
                 })
                 console.log(this.items);
+                console.log('stage -> '+this.stage);
+                
                 
                 
             }else if(result.error){
@@ -180,22 +184,32 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
             this.tableUpdate(tempId, tempType, value);
         }
 ///Add new product to table
-        addProduct(){
-            const setRec = encodeDefaultFieldValues({
-                Order_Request__c: this.recordId
-            })
-            
-            this[NavigationMixin.Navigate]({
-                type:'standard__objectPage',
-                attributes: {
-                    objectApiName: 'Order_Request_Detail__c',
-                    actionName: 'new'
-                },
-                state: {
-                    defaultFieldValues: setRec
+         addProduct(){
+            if(this.stage === 'Approved'|| this.stage==='Rejected'){
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: "You can't add products to approved or rejected orders",
+                        variant: 'error'
+                    })
+                    );
+                    return;  
                 }
-
-            });
+                const setRec = encodeDefaultFieldValues({
+                    Order_Request__c: this.recordId
+                })
+                
+                this[NavigationMixin.Navigate]({
+                    type:'standard__objectPage',
+                    attributes: {
+                        objectApiName: 'Order_Request_Detail__c',
+                        actionName: 'new'
+                    },
+                    state: {
+                        defaultFieldValues: setRec
+                    }
+    
+                });         
         }
 //Delete from the table
         handleAction(i){
