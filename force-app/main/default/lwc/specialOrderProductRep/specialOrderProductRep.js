@@ -1,20 +1,21 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import FORM_FACTOR from '@salesforce/client/formFactor';
+import { NavigationMixin } from 'lightning/navigation';
 import getItems from '@salesforce/apex/lookUpFlow.getOrderRequestItems';
 import { updateRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 
 const columns = [
     {label:'Product Requested', 'fieldName':'nameURL', type:'url', typeAttributes:{label:{fieldName:'product'}},target:'_blank' },
-    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number', cellAttributes:{alignment: 'center'}  },
+    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number', editable:true, cellAttributes:{alignment: 'center'}  },
     {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency', cellAttributes:{alignment: 'center'} },    
     {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed', cellAttributes:{alignment: 'center'}  },
     {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true, cellAttributes:{alignment: 'center'} },
     {label:'Unit Price', 'fieldName':'Unit_Price__c', type:'currency', editable:true, cellAttributes:{alignment: 'center'} },
 ]
 
-export default class SpecialOrderProductRep extends LightningElement {
+export default class SpecialOrderProductRep extends NavigationMixin(LightningElement) {
     isLoading; 
     @api recordId;
     //make component aware of size
@@ -30,7 +31,7 @@ export default class SpecialOrderProductRep extends LightningElement {
     }
     //check screen size to show table on desktop and cards on mobile
     screenSize = (screen) => {
-        return screen === 'Large'? true: false 
+        return screen === 'Large'? true : false  
     }
     //get the items
     @wire(getItems, {recordId: '$recordId'})
@@ -67,9 +68,10 @@ export default class SpecialOrderProductRep extends LightningElement {
             
             const recordInputs = this.items.slice().map(draft =>{
                 let Id = draft.Id;
+                let Quantity_Requested__c = draft.Quantity_Requested__c;
                 let Sales_Margin__c = draft.Sales_Margin__c
                 let Unit_Price__c = draft.Unit_Price__c;
-                const fields = {Id, Sales_Margin__c, Unit_Price__c}
+                const fields = {Id,Quantity_Requested__c, Sales_Margin__c, Unit_Price__c}
                 
             return { fields };
             });
@@ -115,7 +117,10 @@ export default class SpecialOrderProductRep extends LightningElement {
             let index = this.items.findIndex(prod => prod.Id === id);
             window.clearTimeout(this.delay)
                 this.delay = setTimeout(()=>{
-                    if(type === 'Sales_Margin__c'){
+                    if(type=== 'Quantity_Requested__c'){
+                        this.items[index].Quantity_Requested__c = num; 
+                    }
+                    else if(type === 'Sales_Margin__c'){
             
                         this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - num/100)).toFixed(2);
                         this.items[index].Sales_Margin__c = num; 
@@ -141,7 +146,39 @@ export default class SpecialOrderProductRep extends LightningElement {
 
             this.tableUpdate(tempId, tempType, value);
         }
+        addProduct(){
+            if(this.stage != 'Not Submitted'){
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Error',
+                        message: "You can't add products once submitted for approval",
+                        variant: 'error'
+                    })
+                    );
+                    return;  
+                }
+                const setRec = encodeDefaultFieldValues({
+                    Order_Request__c: this.recordId
+                })
+                
+                this[NavigationMixin.Navigate]({
+                    type:'standard__objectPage',
+                    attributes: {
+                        objectApiName: 'Order_Request_Detail__c',
+                        actionName: 'new'
+                    },
+                    state: {
+                        defaultFieldValues: setRec,
+                        navigationLocation: 'RELATED_LIST'
+                    }
+                    
+                });    
+        }
 //Mobile stuff//////
+        handleQTY(qty){
+            let index = this.items.findIndex(prod => prod.Id === qty.target.name);
+            this.items[index].Quantity_Requested__c = Number(qty.detail.value);
+        }
         handleMargin(m){
             let index = this.items.findIndex(prod => prod.Id === m.target.name);
             window.clearTimeout(this.delay); 
@@ -181,9 +218,10 @@ export default class SpecialOrderProductRep extends LightningElement {
             this.isLoading = true;
             const recordInputs =  this.items.slice().map(draft => {
                 let Id = draft.Id;
+                let Quantity_Requested__c = draft.Quantity_Requested__c
                 let Sales_Margin__c = draft.Sales_Margin__c
                 let Unit_Price__c = draft.Unit_Price__c;
-                const fields = {Id, Sales_Margin__c, Unit_Price__c}
+                const fields = {Id,Quantity_Requested__c, Sales_Margin__c, Unit_Price__c}
                 return { fields };
             });
             console.log(recordInputs)
