@@ -12,7 +12,7 @@ const actions = [
 ]
 const columns = [
     {label:'Product Requested', 'fieldName':'nameURL', type:'url', typeAttributes:{label:{fieldName:'product'}},target:'_blank' },
-    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number', cellAttributes:{alignment: 'center'} },
+    {label:'QTY', 'fieldName':'Quantity_Requested__c', type:'number',editable:true, cellAttributes:{alignment: 'center'} },
     {label:'Unit Cost', 'fieldName':'Cost__c', type:'currency', editable:true, cellAttributes:{alignment: 'center'}},    
     {label:'Min Margin', 'fieldName':'Minimum_Margin__c', type:'percent-fixed', editable:true, cellAttributes:{alignment: 'center'} },
     {label:'Sales Margin', 'fieldName':'Sales_Margin__c', type:'percent-fixed',  editable:true, cellAttributes:{alignment: 'center'}},
@@ -40,7 +40,7 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
     }
     //check screen size to show table on desktop and cards on mobile
     screenSize = (screen) => {
-        return screen === 'Large'? true: false 
+        return screen === 'Large'? true : false
     }
     //get the items
     @wire(getItems, {recordId: '$recordId'})
@@ -52,11 +52,11 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
                 this.items = result.data.map(row =>{
                     product = row.ATS_Product__c ? row.ATS_Product__r.Product_Name__c : row.Product_Description__c;
                     nameURL = `/${row.Id}`;
-                    this.stage = row.Order_Request__r.Approval_Status__c; 
+                   // this.stage = row.Order_Request__r.Approval_Status__c; 
                     return {...row, nameURL, product}
                 })
                 console.log(this.items);
-                console.log('stage -> '+this.stage);
+                //console.log('stage -> '+this.stage);
                 
                 
                 
@@ -83,11 +83,12 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
             this.isLoading = true;
                 const recordInputs = this.items.slice().map(draft =>{
                     let Id = draft.Id;
+                    let Quantity_Requested__c = draft.Quantity_Requested__c
                     let Sales_Margin__c = draft.Sales_Margin__c
                     let Unit_Price__c = draft.Unit_Price__c;
                     let Cost__c = draft.Cost__c;
                     let Minimum_Margin__c = draft.Minimum_Margin__c;
-                    const fields = {Id, Sales_Margin__c, Unit_Price__c, Cost__c, Minimum_Margin__c}
+                    const fields = {Id,Quantity_Requested__c, Sales_Margin__c, Unit_Price__c, Cost__c, Minimum_Margin__c}
                     
                 return { fields };
             });
@@ -133,7 +134,10 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
             let index = this.items.findIndex(prod => prod.Id === id);
             window.clearTimeout(this.delay)
             this.delay = setTimeout(()=>{
-                if (type === 'Cost__c'){
+                if(type ==='Quantity_Requested__c'){
+                    this.items[index].Quantity_Requested__c = num;
+                }
+                else if (type === 'Cost__c'){
                     this.items[index].Cost__c = num;
                     if(this.items[index].Minimum_Margin__c < 0.01 || this.items[index].Minimum_Margin__c === undefined){
                         return;
@@ -206,10 +210,11 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
                         actionName: 'new'
                     },
                     state: {
-                        defaultFieldValues: setRec
+                        defaultFieldValues: setRec,
+                        navigationLocation: 'RELATED_LIST'
                     }
-    
-                });         
+                    
+                });    
         }
 //Delete from the table
         handleAction(i){
@@ -248,6 +253,10 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
             }
         }
 //Mobile stuff//////
+        handleQTY(m){
+            let index = this.items.findIndex(prod => prod.Id === m.target.name);
+            this.items[index].Quantity_Requested__c = Number(m.detail.value);
+        }
         handleMargin(m){
             let index = this.items.findIndex(prod => prod.Id === m.target.name);
             window.clearTimeout(this.delay); 
@@ -303,11 +312,12 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
             this.isLoading = true;
             const recordInputs =  this.items.slice().map(draft => {
                 let Id = draft.Id;
+                let Quantity_Requested__c = draft.Quantity_Requested__c;
                 let Sales_Margin__c = draft.Sales_Margin__c
                 let Unit_Price__c = draft.Unit_Price__c;
                 let Cost__c = draft.Cost__c;
                 let Minimum_Margin__c = draft.Minimum_Margin__c;
-                const fields = {Id, Sales_Margin__c, Unit_Price__c, Cost__c, Minimum_Margin__c}
+                const fields = {Id, Quantity_Requested__c, Sales_Margin__c, Unit_Price__c, Cost__c, Minimum_Margin__c}
                 return { fields };
             });
             console.log(recordInputs)

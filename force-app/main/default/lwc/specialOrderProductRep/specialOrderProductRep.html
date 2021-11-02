@@ -5,6 +5,12 @@
     </template>
     <template if:false={isLoading}>
         <template if:true={formSize}>
+            <!-- <lightning-button
+            label="Add product"
+            variant="brand"
+            class="slds-m-bottom_xxx-small slds-align_absolute-center"
+            onclick={addProduct}
+        ></lightning-button> -->
             <lightning-datatable
                 key-field='Id'
                 data={items}
@@ -26,7 +32,7 @@
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
                             <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
                            <p>Minimum Margin</p> <lightning-formatted-number id={item.Id} value={item.Minimum_Margin__c} label='Sales Margin' format-style="percent-fixed" readonly></lightning-formatted-number>
-                           <lightning-input label='QTY' name={item.Id} value={item.Quantity_Requested__c} readonly type='number'></lightning-input>
+                           <lightning-input label='QTY' name={item.Id} value={item.Quantity_Requested__c} onchange={handleQTY} type='number'></lightning-input>
                         </div>
                         <div class='slds-col slds-size_1-of-2 slds-m-left_x-small'>
                             <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
