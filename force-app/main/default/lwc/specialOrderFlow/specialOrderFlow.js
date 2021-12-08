@@ -79,7 +79,8 @@ export default class SpecialOrderFlow extends LightningElement {
                 name: this.productName,
                 Product_Description__c: desc,
                 Quantity_Requested__c: this.qty,
-                ATS_Product__c: this.prodsId
+                ATS_Product__c: this.prodsId,
+                Minimum_Margin__c: this.productName.includes('FOLIAR-PAK') ? 45: 35
             }
         ]
         //desc field

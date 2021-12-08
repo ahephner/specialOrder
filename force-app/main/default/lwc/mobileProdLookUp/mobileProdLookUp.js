@@ -8,12 +8,13 @@ export default class MobileProdLookUp extends LightningElement {
     @api prodDesc;
     @api qty; 
     @api prodId; 
+    @api minMarg; 
+    @api productName;
     loading = false; 
     //search varss
     minSearchTerm = 3;
     queryTerm;
     searchTimeOut;
-    productName;
     prodsId;
     showResult = false; 
     
@@ -47,7 +48,7 @@ export default class MobileProdLookUp extends LightningElement {
 //search for product
 //function handles the actual typing
 handleKeyUp(searchTerm) {
-    console.log('searchTerm leng ' +searchTerm.target.value.length );
+    //console.log('searchTerm leng ' +searchTerm.target.value.length );
     
     if(this.minSearchTerm > searchTerm.target.value.length){
         this.showResult = false;
@@ -81,9 +82,14 @@ handleKeyUp(searchTerm) {
             this.showResult = false;
             this.productName = evt.target.value;
             this.prodId = evt.currentTarget.dataset.recordid
-
+            console.log('evt.target '+   evt.currentTarget.dataset);
+            
+            this.minMarg = this.productName.includes('FOLIAR-PAK') ? 45 : 35
+            
+            const productName = new FlowAttributeChangeEvent('productName', this.productName);
             const attributeChange = new FlowAttributeChangeEvent('prodId', this.prodId);
-            this.dispatchEvent(attributeChange); 
+            this.dispatchEvent(attributeChange);
+            this.dispatchEvent(productName); 
         }
 //drop down class
     get getListBoxClass(){

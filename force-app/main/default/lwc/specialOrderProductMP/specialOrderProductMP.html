@@ -5,12 +5,13 @@
     </template>
     <template if:false={isLoading}>
         <template if:true={formSize}>
-            <!-- <lightning-button
+         <!--    <lightning-button
             label="Add product"
             variant="brand"
             class="slds-m-bottom_xxx-small slds-align_absolute-center"
             onclick={addProduct}
-        ></lightning-button> -->
+        ></lightning-button> 
+        
             <lightning-datatable
                 key-field='Id'
                 data={items}
@@ -20,10 +21,48 @@
                 oncellchange={handleCell}
                 onrowaction={handleAction}
                 hide-checkbox-column>
-
-            </lightning-datatable>
+            </lightning-datatable>-->
+    <lightning-layout multiple-rows="true">
+        <template for:each={items} for:item='item'>
+            <lightning-layout-item size="12" key={item.Id} class="slds-box slds-p-around_none 
+                slds-m-top_x-small  slds-m-horizontal_none">
+                <div class='slds-grid'>
+                    <div class='slds-col slds-size_2-of-8 slds-m-left_x-small'>
+                        <lightning-input id={item.Id} value={item.product} type='text' label='Product' readonly></lightning-input>
+                    </div>
+                    <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
+                        <lightning-input name={item.Id} value={item.Cost__c} label='Unit Cost' 
+                        type='number' formater='currency' onchange={handleCost}></lightning-input>
+                    </div>
+                    <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
+                        <lightning-input label='QTY' name={item.Id} value={item.Quantity_Requested__c} onchange={handleQTY} type='number'></lightning-input>
+                    </div>
+                    <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
+                        <lightning-input name={item.Id} value={item.Minimum_Margin__c} label='Min. Margin' 
+                        type='number' formater='percent' onchange={handleMinMargin}></lightning-input> 
+                    </div>    
+                    <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
+                        <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
+                        type='number' formater='percent' onchange={handleMargin}></lightning-input>
+                    </div>
+                    <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
+                        <lightning-input name={item.Id} value={item.Unit_Price__c} label='Total Price' 
+                        type='number' formater='currency' onchange={handlePrice} ></lightning-input>
+                    </div>
+                </div>
+            </lightning-layout-item>
         </template>
-
+    </lightning-layout>
+                <!--Buttons to save-->
+            <div class='slds-grid slds-m-top_small'>
+                <span class='slds-col slds-size_2-of-3'></span>
+                <span class='slds-col slds-size_1-of-3 slds-m-bottom_x-small'>
+                    <div class='slds-float_right slds-m-right_medium'>
+                        <lightning-button variant="success" label="Save" title="save" onclick={handleSave}></lightning-button>
+                    </div>
+                </span>
+            </div>
+    </template>
         <template if:false={formSize}>
             <lightning-layout multiple-rows="true">
                 <template for:each={items} for:item='item'>
