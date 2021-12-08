@@ -27,7 +27,9 @@ public with sharing class lookUpFlow {
                                 system.debug('orderId '+orderId);
                                ap.ATS_Product__c = temp.ATS_Product__c; 	
                                ap.Product_Description__c = temp.Product_Description__c;
-                               ap.Quantity_Requested__c = temp.Quantity_Requested__c; 
+                               ap.Quantity_Requested__c = temp.Quantity_Requested__c;
+                               ap.Minimum_Margin__c = temp.Minimum_Margin__c;
+                               ap.Sales_Margin__c = temp.Minimum_Margin__c;  
                                 //system.debug('product id '+ ap.Product__c);
                                 prodList.add(ap);
                             }

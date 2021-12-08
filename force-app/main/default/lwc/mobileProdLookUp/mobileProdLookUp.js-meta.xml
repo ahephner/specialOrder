@@ -20,6 +20,8 @@
             <property name='prodDesc' type='String'/>
             <property name='qty' type='Integer'/>
             <property name='prodId' type='String'/>
+            <property name='minMarg' type='Integer'/>
+            <property name='productName' type='String'/>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

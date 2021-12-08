@@ -290,10 +290,11 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
         handleCost(c){
             let index = this.items.findIndex(prod => prod.Id === c.target.name);
             this.items[index].Cost__c = Number(c.detail.value);
+            
             if(this.items[index].Minimum_Margin__c ===0 || this.items[index].Minimum_Margin__c === undefined){
                 return;
             }else{
-                this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - mm.detail.value/100)).toFixed(2);
+                this.items[index].Unit_Price__c = Number(this.items[index].Cost__c /(1 - this.items[index].Minimum_Margin__c/100)).toFixed(2);
             }
         }
 

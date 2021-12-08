@@ -19,7 +19,7 @@ public class specialOrderCloneWProducts {
         
         try{
         Order_Request__c head = [Select Name, Approval_Status__c, Notes__c, Freight__c, Requested_By__c, Sales_Manager__c,
-                                  Sales_Rep__c, Sent_For_Approval__c,Request_Date__c from Order_Request__c where id = :ord.Id];
+                                  ATS_Shipping__c, Sales_Rep__c, Sent_For_Approval__c,Request_Date__c from Order_Request__c where id = :ord.Id];
             
             newOrder = head.clone(false, false, false, false);
             newOrder.Approval_Status__c = 'Not Submitted';
