@@ -67,22 +67,34 @@ export default class SpecialOrderFlow extends LightningElement {
             alert('Please make sure there is qty'); 
             return; 
         } 
-        // if((this.productName === undefined || this.productName.length<0) && (desc === undefined || desc.length<5)){
-        //     alert('Please make sure your are selecting a product');
-        //     return; 
-        // }
+        console.log('prod Name '+this.productName)
                // this will be used to pass the values back out to the flow. 
-               this.arrId = this.arrId +1
+        if(this.productName){
+            this.arrId = this.arrId +1
+            this.selectedIds = [
+                ...this.selectedIds, {
+                    id: this.arrId,
+                    name: this.productName,
+                    Product_Description__c: desc,
+                    Quantity_Requested__c: this.qty,
+                    ATS_Product__c: this.prodsId,
+                    Minimum_Margin__c: this.productName.includes('FOLIAR-PAK') ? 45: 35
+                }
+            ]
+        }else{
+            this.arrId = this.arrId +1
         this.selectedIds = [
             ...this.selectedIds, {
                 id: this.arrId,
-                name: this.productName,
+               // name: this.productName,
                 Product_Description__c: desc,
                 Quantity_Requested__c: this.qty,
                 ATS_Product__c: this.prodsId,
-                Minimum_Margin__c: this.productName.includes('FOLIAR-PAK') ? 45: 35
+                Minimum_Margin__c: 35
             }
         ]
+        }
+        
         //desc field
         this.template.querySelector('lightning-input[data-my-id=in3]').value = '';
         this.productName = '';

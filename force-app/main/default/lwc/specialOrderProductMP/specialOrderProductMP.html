@@ -32,22 +32,23 @@
                     </div>
                     <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
                         <lightning-input name={item.Id} value={item.Cost__c} label='Unit Cost' 
-                        type='number' formater='currency' onchange={handleCost}></lightning-input>
+                        type='number' formater='currency' onchange={handleCost} step='0.01' ></lightning-input>
                     </div>
                     <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
-                        <lightning-input label='QTY' name={item.Id} value={item.Quantity_Requested__c} onchange={handleQTY} type='number'></lightning-input>
+                        <lightning-input label='QTY' name={item.Id} value={item.Quantity_Requested__c} 
+                        onchange={handleQTY} type='number' step='0.01'></lightning-input>
                     </div>
                     <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
                         <lightning-input name={item.Id} value={item.Minimum_Margin__c} label='Min. Margin' 
-                        type='number' formater='percent' onchange={handleMinMargin}></lightning-input> 
+                        type='number' formater='percent' onchange={handleMinMargin} step='0.01'></lightning-input> 
                     </div>    
                     <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
                         <lightning-input name={item.Id} value={item.Sales_Margin__c} label='Sales Margin' 
-                        type='number' formater='percent' onchange={handleMargin}></lightning-input>
+                        type='number' formater='percent' onchange={handleMargin} step='0.01'></lightning-input>
                     </div>
                     <div class='slds-col slds-size_1-of-7 slds-m-left_x-small'>
                         <lightning-input name={item.Id} value={item.Unit_Price__c} label='Total Price' 
-                        type='number' formater='currency' onchange={handlePrice} ></lightning-input>
+                        type='number' formater='currency' onchange={handlePrice} step='0.01'></lightning-input>
                     </div>
                 </div>
             </lightning-layout-item>
