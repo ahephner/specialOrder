@@ -1,7 +1,8 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import FORM_FACTOR from '@salesforce/client/formFactor';
-import getItems from '@salesforce/apex/lookUpFlow.getOrderRequestItems';
+//import getItems from '@salesforce/apex/lookUpFlow.getOrderRequestItems';
+import getItems from '@salesforce/apex/lookUpFlow.getOrderRequestProducts';
 import { updateRecord, deleteRecord } from 'lightning/uiRecordApi';
 import { refreshApex } from '@salesforce/apex';
 import { NavigationMixin } from 'lightning/navigation';
@@ -50,7 +51,7 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
                 let product; 
                 let nameURL
                 this.items = result.data.map(row =>{
-                    product = row.ATS_Product__c ? row.ATS_Product__r.Product_Name__c : row.Product_Description__c;
+                    product = row.Product__c ? row.Product__r.Name : row.Product_Description__c;
                     nameURL = `/${row.Id}`;
                    // this.stage = row.Order_Request__r.Approval_Status__c; 
                     return {...row, nameURL, product}

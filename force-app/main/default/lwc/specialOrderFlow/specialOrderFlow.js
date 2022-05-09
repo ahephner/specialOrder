@@ -2,8 +2,9 @@ import { LightningElement, api, track, wire } from 'lwc';
 import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flowSupport';
 //wait 300 ms after user stops typing
 const SEARCH_DELAY = 500; 
-import searchProd from '@salesforce/apex/lookUpFlow.searchProd';
+import searchProd from '@salesforce/apex/lookUpFlow.searchProducts2';
 import addProducts from '@salesforce/apex/lookUpFlow.addProducts';
+import insertProd from '@salesforce/apex/lookUpFlow.insertProd';
 const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|\\)/g;
 export default class SpecialOrderFlow extends LightningElement {
     //tracking Importing
@@ -42,6 +43,7 @@ export default class SpecialOrderFlow extends LightningElement {
             const key = searchTerm.target.value.trim().replace(REGEX_SOSL_RESERVED, '?').toLowerCase();;
         this.searchTimeOut = setTimeout(() =>{
             this.loading = true; 
+            
             this.queryTerm = key; 
             
             this.searchTimeOut = null; 
@@ -77,7 +79,7 @@ export default class SpecialOrderFlow extends LightningElement {
                     name: this.productName,
                     Product_Description__c: desc,
                     Quantity_Requested__c: this.qty,
-                    ATS_Product__c: this.prodsId,
+                    Product__c: this.prodsId,
                     Minimum_Margin__c: this.productName.includes('FOLIAR-PAK') ? 45: 35
                 }
             ]
@@ -89,7 +91,7 @@ export default class SpecialOrderFlow extends LightningElement {
                // name: this.productName,
                 Product_Description__c: desc,
                 Quantity_Requested__c: this.qty,
-                ATS_Product__c: this.prodsId,
+                Product__c: this.prodsId,
                 Minimum_Margin__c: 35
             }
         ]
@@ -123,7 +125,7 @@ export default class SpecialOrderFlow extends LightningElement {
             console.log('products'+products);
             let order = this.orderId;
             console.log(order)
-            addProducts({products:products, orderId: order})
+            insertProd({products:this.selectedIds, orderId: order})
              .then(()=>{
             // check if NEXT is allowed on this screen
             // navigate to the next screen
