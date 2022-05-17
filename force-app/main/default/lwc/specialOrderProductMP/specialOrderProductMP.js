@@ -38,6 +38,7 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
     connectedCallback(){
         this.formSize= this.screenSize(FORM_FACTOR);
         console.log('formSize '+this.formSize);
+        
     }
     //check screen size to show table on desktop and cards on mobile
     screenSize = (screen) => {
@@ -58,14 +59,21 @@ export default class SpecialOrderProductMP extends NavigationMixin(LightningElem
                 })
                 console.log(this.items);
                 //console.log('stage -> '+this.stage);
-                
-                
-                
+                 
             }else if(result.error){
                 this.items = undefined;
                 console.log(result.error);
             }
         }
+
+        // addListeners(){
+        //     console.log('listening')
+        //     var itms = this.template.querySelectorAll('.outter');
+        //     console.log(1,itms.length)
+        //     itms.forEach(x =>{
+        //         console.log(x)
+        //     })
+        // }
 //Refresh
         @api
         async refresh(){

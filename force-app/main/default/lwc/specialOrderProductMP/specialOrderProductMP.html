@@ -24,6 +24,7 @@
             </lightning-datatable>-->
     <lightning-layout multiple-rows="true">
         <template for:each={items} for:item='item'>
+        <div class="outter" draggable="true" key={item.Id}>
             <lightning-layout-item size="12" key={item.Id} class="slds-box slds-p-around_none 
                 slds-m-top_x-small  slds-m-horizontal_none">
                 <div class='slds-grid'>
@@ -52,6 +53,7 @@
                     </div>
                 </div>
             </lightning-layout-item>
+        </div>
         </template>
     </lightning-layout>
                 <!--Buttons to save-->
