@@ -1,0 +1,33 @@
+<template>
+    <lightning-card  variant="Narrow"  title="Shipping Address" >
+        <template if:true={stageIsEditable}>
+            
+        <label for="ship-select">Shipping Address:</label>
+        <select name="address" class="slds-select"  onchange={selectChange}>
+            <template if:true={selectedObj}> 
+                <option value={selectedObj.value}>{selectedObj.label}</option>
+            </template>
+            <template if:false={selectedObj}>
+                <option value=""></option>
+            </template>
+            <template for:each={options} for:item='x'>
+                
+                <option key={x.value} value={x.value}>{x.label}</option>
+            </template>
+            <option value='new'>Add New Shipping Address</option>
+        </select>
+    </template>
+    <template if:false={stageIsEditable}>
+        <div class="slds-m-left_medium">
+            <label for="ship-select">Shipping Address</label>
+            <p>{nonEditableLabel}</p>
+        </div>
+    </template>
+    </lightning-card>
+
+    
+        <!--New address modal -->
+        <c-new-ship-address
+                           onnewaddress={updateAddress}
+                           acc-id={customer}></c-new-ship-address>
+</template>
