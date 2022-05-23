@@ -3,7 +3,7 @@ import { FlowNavigationBackEvent, FlowNavigationNextEvent } from 'lightning/flow
 //wait 300 ms after user stops typing
 const SEARCH_DELAY = 500; 
 import searchProd from '@salesforce/apex/lookUpFlow.searchProducts2';
-import addProducts from '@salesforce/apex/lookUpFlow.addProducts';
+//import addProducts from '@salesforce/apex/lookUpFlow.addProducts';
 import insertProd from '@salesforce/apex/lookUpFlow.insertProd';
 const REGEX_SOSL_RESERVED = /(\?|&|\||!|\{|\}|\[|\]|\(|\)|\^|~|\*|:|"|\+|\\)/g;
 export default class SpecialOrderFlow extends LightningElement {

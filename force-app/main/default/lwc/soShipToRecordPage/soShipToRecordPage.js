@@ -4,7 +4,7 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import ACCID from '@salesforce/schema/Order_Request__c.Customer__c';
 import SHIPID from '@salesforce/schema/Order_Request__c.Shipping_Address__c';
 import ID_FIELD from '@salesforce/schema/Order_Request__c.Id';
-import STAGE from '@salesforce/schema/Order_Request__c.Approval_Status__c'
+import STAGE from '@salesforce/schema/Order_Request__c.Approval_Status__c';
 import getAddress from '@salesforce/apex/cpqApex.getAddress';
 import hasPermission from '@salesforce/customPermission/Special_Order_Mobile_Manager';
 /* https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.reference_salesforce_modules */
@@ -19,6 +19,7 @@ export default class SoShipToRecordPage extends LightningElement {
     error;
     showAddresses = true; 
     stage; 
+    sentIn; 
     stageIsEditable; 
     nonEditableLabel
 
@@ -32,6 +33,7 @@ export default class SoShipToRecordPage extends LightningElement {
                 this.findAddress(this.customer)
                 this.selected = getFieldValue(data, SHIPID);
                 this.stage = getFieldValue(data, STAGE); 
+                //this.sentIn = getFieldValue(data, SENT_IN);
                 this.checkStage(this.stage, hasPermission); 
             }else if(error){
                 this.error = error;
@@ -112,8 +114,10 @@ export default class SoShipToRecordPage extends LightningElement {
     }
 
     checkStage(stage, perm){
-        if(stage != 'Approved' && perm){
-           this.stageIsEditable = true; 
+        if(stage === 'Not Submitted'){
+            this.stageIsEditable = true;
+        }else if(stage != 'Approved' && perm){
+            this.stageIsEditable = true; 
         }else{
             this.stageIsEditable = false; 
         }
