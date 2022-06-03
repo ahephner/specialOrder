@@ -1,0 +1,40 @@
+<template>
+    <template if:true={info}>
+    <div class="topBox">
+        <label for="ship-select">Shipping Address:</label>
+            <select name="address" class="slds-select valAdd"  onchange={selectChange} required>
+                <template if:true={selectedObj}> 
+                    <option value={selectedObj.value}>{selectedObj.label}</option>
+                </template>
+                    <template if:false={selectedObj}>
+                        <option value=""></option>
+                    </template>
+                    <template for:each={options} for:item='x'>
+                        <option key={x.value} value={x.value}>{x.label}</option>
+                    </template>
+                        <option value='new'>Add New Shipping Address</option>
+            </select>
+    </div>
+            <footer class="slds-modal__footer slds-align_absolute-center">
+                <lightning-button
+                    variant="neutral"
+                    label="Cancel"
+                    onclick={handleBack}
+                ></lightning-button>
+                <lightning-button
+                    variant="brand"
+                    label="Save"
+                    class="slds-m-left_x-small"
+                    onclick={handleNext}
+                ></lightning-button>
+            </footer>
+    </template>
+    <template if:false={info}>
+        <!-- this component is not in this stack -->
+        <!-- find it here: https://github.com/ahephner/cpq/tree/main/force-app/main/default/lwc/closeWinShipAdd -->
+        <c-close-win-ship-add
+        acc-id={accountId}
+        onnewaddress={updateAddress}
+        oncloseadd={cancelNewAddress}></c-close-win-ship-add>
+    </template>
+</template>
