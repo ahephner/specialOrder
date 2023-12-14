@@ -56,7 +56,8 @@ export default class SoShipToRecordPage extends LightningElement {
                 console.log('error  '+this.error);
                 
             }).finally(()=>{
-                this.nonEditableLabel = this.options.find((x)=>x.value===this.selected).label;
+                //prevent load error on non special orders. 
+                this.nonEditableLabel = this.options.find((x)=>x.value===this.selected)?.label ?? '';
             })
     }
 //if a ship to has already been selected set that value
